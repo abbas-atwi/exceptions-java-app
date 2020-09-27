@@ -23,7 +23,7 @@ public class Program {
 
 		System.out.print("Check-Out (dd/MM/yyyy): ");
 		Date checkOut = sdf.parse(sc.next());
-
+//Nao e dps
 		if (!checkOut.after(checkIn)) {
 			System.out.println("Erro na reservacao data posterior");
 		} else {
@@ -34,21 +34,17 @@ public class Program {
 			System.out.println("Atualizar a data");
 			System.out.print("Check-in (dd/MM/yyyy): ");
 			checkIn = sdf.parse(sc.next());
-
 			System.out.print("Check-Out (dd/MM/yyyy): ");
 			checkOut = sdf.parse(sc.next());
-//De agora
-			Date agora = new Date();
 
-			if (checkIn.before(agora) || checkOut.before(agora)) {
-				System.out.println("Somente datas futuras");
-			} else if (!checkOut.after(checkIn)) {
-				System.out.println("Erro na reservacao data nao posterior (dps)");
-			} else {
-				res.atualizacaoData(checkIn, checkOut);
-				System.out.println("Atualizado" + res);
+			String error = res.atualizacaoData(checkIn, checkOut);
+			if(error != null) {
+				System.out.println("Datas invalidas" + error);
+			}else {
+				System.out.println("Atualizacao : " + res);
 			}
-
+		
+		
 		}
 
 		sc.close();

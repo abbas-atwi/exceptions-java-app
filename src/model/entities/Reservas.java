@@ -11,6 +11,7 @@ public class Reservas {
 	private Date checkOut;
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
 	public Reservas(Integer numeroQuarto, Date checkIn, Date checkOut) {
 
 		this.numeroQuarto = numeroQuarto;
@@ -39,23 +40,26 @@ public class Reservas {
 		long diff = checkOut.getTime() - checkIn.getTime();
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
-	
-	public void atualizacaoData(Date checkIn, Date checkOut) {
+
+	public String atualizacaoData(Date checkIn, Date checkOut) {
+		Date agora = new Date();
+		if (checkIn.before(agora) || checkOut.before(agora)) {
+			return "Somente datas futuras";
+		}
+		if (!checkOut.after(checkIn)) {
+			return "Erro na reservacao data nao posterior (dps)";
+		}
+
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-	}
+		return null;
 	
+	}
+
 	@Override
 	public String toString() {
-		return "Reservas " + "Quartos "
-				+ numeroQuarto
-				+", check-in "
-				+sdf.format(checkIn)
-				+ ", check-out "
-				+ sdf.format(checkOut)
-				+ ", "
-				+ duracao()
-				+ " noites";
+		return "Reservas " + "Quartos " + numeroQuarto + ", check-in " + sdf.format(checkIn) + ", check-out "
+				+ sdf.format(checkOut) + ", " + duracao() + " noites";
 	}
-	
+
 }
