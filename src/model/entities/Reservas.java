@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainException;
+
 public class Reservas {
 
 	private Integer numeroQuarto;
@@ -12,8 +14,10 @@ public class Reservas {
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	public Reservas(Integer numeroQuarto, Date checkIn, Date checkOut) {
-
+	public Reservas(Integer numeroQuarto, Date checkIn, Date checkOut)  {
+		if (!checkOut.after(checkIn)) {
+			throw new DomainException( "Erro na reservacao data nao posterior (dps)");
+		}
 		this.numeroQuarto = numeroQuarto;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -41,18 +45,17 @@ public class Reservas {
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 
-	public String atualizacaoData(Date checkIn, Date checkOut) {
+	public void atualizacaoData(Date checkIn, Date checkOut)  {
 		Date agora = new Date();
 		if (checkIn.before(agora) || checkOut.before(agora)) {
-			return "Somente datas futuras";
+			throw new DomainException( "Somente datas futuras");
 		}
 		if (!checkOut.after(checkIn)) {
-			return "Erro na reservacao data nao posterior (dps)";
+			throw new DomainException( "Erro na reservacao data nao posterior (dps)");
 		}
 
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
 	
 	}
 
